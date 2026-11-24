@@ -1,118 +1,155 @@
-# Car Acceptability Prediction
+# 🚗 Car Acceptability Prediction
 
-**Author:** Abhishek Singh (12406001)
-**Email:** iabhii026@gmail.com
-**GitHub:** [@YOUR_GITHUB_ID](https://github.com/YOUR_GITHUB_ID)
+> A simple, interpretable machine learning project that predicts whether a car is **unacceptable, acceptable, good, or very good** from six attributes. It compares a Decision Tree, KNN, Logistic Regression, and Naive Bayes on the UCI Car Evaluation dataset.
 
-A simple machine learning project that predicts how acceptable a car is
-(`unacc`, `acc`, `good`, `vgood`) from six attributes: buying price, maintenance cost,
-number of doors, passenger capacity, luggage boot size, and safety.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge)
+![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 
-The project compares **five simple models** and explains the best one with plain if-then rules.
-The full write-up is in `research_paper/car_acceptability_paper.pdf`.
+---
 
-## Results
+## 🧠 Tech Stack
 
-Test set: 346 cars (20% of the data, stratified).
+| Layer | Technology |
+|---|---|
+| Data Processing | ![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white) |
+| ML Models | ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikitlearn&logoColor=white) (Decision Tree, KNN, Logistic Regression, Naive Bayes) |
+| Statistics | SciPy (chi-square test, corrected t-test) |
+| Visualization | ![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=flat) |
+| Environment | ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=flat&logo=jupyter&logoColor=white) |
 
-| Model | Accuracy | Macro F1 |
-|---|---|---|
-| **Decision Tree (depth 6)** | **0.939** | **0.838** |
-| KNN (k = 5) | 0.916 | 0.816 |
-| Naive Bayes | 0.841 | 0.542 |
-| Logistic Regression | 0.801 | 0.598 |
-| Majority-class baseline | 0.699 | 0.206 |
+---
 
-Most cars are `unacc` (70%), so accuracy alone is misleading. Macro F1 is the main metric.
-
-Across 20 different train/test splits, KNN has a slightly higher average macro F1 than the
-Decision Tree (0.865 vs 0.833). The two models are statistically tied in repeated cross-validation.
-
-**Most important features:** `persons` and `safety`. Number of doors has almost no effect.
-
-## Dataset
-
-UCI Car Evaluation dataset (Bohanec, 1997). Source: <https://doi.org/10.24432/C5JP48>
-
-- 1,728 cars, 6 features, no missing values, no duplicates
-- Each row is a unique combination of the six features, and labels come from a fixed expert rule model
-
-The raw file is `data/car.data`. The column names are in `data/car.names`.
-
-## Project structure
+## 📁 Folder Structure
 
 ```
-12406001_37_AP/
-├── car_acceptability.ipynb   # main analysis notebook (run from top to bottom)
-├── analysis_extra.py         # extra analyses used in the paper (20 splits, depth, k)
+car-acceptability-prediction/
+├── car_acceptability.ipynb     ← Main notebook (run top to bottom)
+├── analysis_extra.py           ← Extra analyses: 20-split test, depth and k sensitivity
 ├── data/
-│   ├── car.data              # raw dataset (no header row)
-│   └── car.names             # dataset description
-├── figures/                  # figures used in the paper and saved by the notebook
-├── results/                  # result tables (CSV)
+│   ├── car.data                ← Raw dataset (1,728 cars, no header row)
+│   └── car.names               ← Dataset description (UCI)
+├── figures/                    ← Plots used in the paper and saved by the notebook
+├── results/                    ← Result tables (CSV)
 ├── research_paper/
 │   └── car_acceptability_paper.pdf
-├── requirements.txt          # Python packages
+├── requirements.txt            ← Python dependencies
 ├── .gitignore
 └── README.md
 ```
 
-## How to run
+---
 
-Run everything from the project folder, because the paths are relative.
+## ⚙️ How It Works
 
-1. **Create a virtual environment (recommended):**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate        # Windows: .venv\Scripts\activate
-   ```
-2. **Install the requirements:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Open the notebook:**
-   ```bash
-   jupyter notebook car_acceptability.ipynb
-   ```
-4. **Run all cells** (Cell > Run All). It takes a few seconds.
-5. **(Optional) Run the extra analyses:**
-   ```bash
-   python analysis_extra.py
-   ```
+1. Load the UCI Car Evaluation dataset and check for missing values and duplicates.
+2. Look at the class distribution. About 70% of cars are `unacc`, so the data is imbalanced.
+3. Encode the six attributes as ordered integers (for example, `low < med < high < vhigh`).
+4. Split the data 80/20 into training (1,382 cars) and test (346 cars) sets, stratified by class.
+5. Choose the decision tree depth with 5-fold cross-validation on the training set.
+6. Train five models: majority baseline, Logistic Regression, Decision Tree, KNN (k=5), and Naive Bayes.
+7. Evaluate with accuracy and macro F1, then check the differences with repeated cross-validation and a corrected t-test.
+8. Check stability across 20 different splits, and analyse feature importance and decision rules.
 
-## What the notebook does
+---
 
-| Section | Content |
-|---|---|
-| 1 | Load the data and check for missing values and duplicates |
-| 2 | Look at the class distribution (imbalance) |
-| 3 | Encode the features as ordered numbers |
-| 4 | Split into 80% training and 20% test |
-| 5 | Choose the decision tree depth with 5-fold cross-validation, then build the 5 models |
-| 6 | Train and test every model |
-| 7 | Compare the models (chart and table) |
-| 8 | Confusion matrix and per-class report for the best model |
-| 9 | Feature importance from the decision tree |
-| 10 | Predict the acceptability of a new car |
-| 11 | Conclusion |
+## 📊 Model Results (Test Set, 346 cars)
 
-## Models
+| Model | Accuracy | Precision (macro) | Recall (macro) | F1 (macro) |
+|---|---|---|---|---|
+| **Decision Tree (depth 6)** | **0.939** | **0.812** | **0.870** | **0.838** |
+| KNN (k = 5) | 0.916 | 0.925 | 0.766 | 0.816 |
+| Naive Bayes | 0.841 | 0.671 | 0.510 | 0.542 |
+| Logistic Regression | 0.801 | 0.669 | 0.557 | 0.598 |
+| Majority baseline | 0.699 | 0.175 | 0.250 | 0.206 |
 
-| Model | Why it is included |
-|---|---|
-| Majority-class baseline | Reference point: always predicts the most common class |
-| Logistic Regression | Simple linear model |
-| Decision Tree | Easy to read as if-then rules (best model) |
-| K-Nearest Neighbors (k=5) | Predicts by looking at the most similar cars |
-| Naive Bayes | Probabilistic model that assumes independent features |
+**Confusion matrix: Decision Tree**
 
-## Notes
+| Actual \ Predicted | unacc | acc | good | vgood |
+|---|---|---|---|---|
+| unacc | 235 | 7 | 0 | 0 |
+| acc | 1 | 68 | 6 | 2 |
+| good | 0 | 0 | 12 | 2 |
+| vgood | 0 | 3 | 0 | 10 |
 
-- Ordinal encoding is used because the levels have a natural order (`low < med < high`).
-- The decision tree depth is limited to 6 so the tree stays readable.
-- Results use one fixed random seed (`random_state=42`) for the main split.
-  The 20-split analysis in `analysis_extra.py` shows how much the scores vary between splits.
+**Key findings**
+- The Decision Tree gives the best result on the main split. Across 20 different splits, KNN has a slightly higher average macro F1 (0.865 vs 0.833). The two are statistically tied in repeated cross-validation (p = 0.35).
+- Logistic Regression and Naive Bayes are clearly worse, because the car rules depend on combinations of attributes.
+- **Most influential features:** `safety` and `persons`. Number of doors has almost no effect.
 
-## License and citation
+![Feature Importance](figures/fig_importance.pdf)
+![Test-set Results](figures/fig_test.pdf)
 
-The dataset is public (UCI Machine Learning Repository). If you use this project, please cite the paper in `research_paper/`.
+---
+
+## 🧬 Concepts Used
+
+- **Ordinal encoding** of ordered attributes
+- **Stratified train/test split** to keep class proportions
+- **Class imbalance handling** through macro F1, per-class recall, and confusion matrices
+- **Cross-validation and corrected paired t-test** (Nadeau and Bengio) for model comparison
+- **Feature importance:** Cramér's V, decision tree impurity, and permutation importance
+- **Interpretability:** the final decision tree is printed as plain if-then rules
+
+---
+
+## 🛠️ How to Run
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/YOUR_GITHUB_ID/car-acceptability-prediction.git
+cd car-acceptability-prediction
+```
+
+### 2. Install the requirements
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the notebook
+```bash
+jupyter notebook car_acceptability.ipynb
+```
+Run all cells from top to bottom (**Cell → Run All**). It takes a few seconds. Run it from the project folder, because the paths are relative.
+
+### 4. (Optional) Run the extra analyses
+```bash
+python analysis_extra.py
+```
+
+---
+
+## 📦 Requirements
+
+```
+pandas
+numpy
+matplotlib
+scikit-learn
+jupyter
+notebook
+```
+
+---
+
+## 📚 Dataset
+
+UCI Car Evaluation dataset (Bohanec, 1997).
+Source: https://doi.org/10.24432/C5JP48
+
+---
+
+## 👨‍💻 Author
+
+- **Abhishek Singh** (12406001) — [GitHub](https://github.com/YOUR_GITHUB_ID) · iabhii026@gmail.com
+
+Lovely Professional University, Department of Computer Science and Engineering
+
+---
+
+## 🙏 Thank You
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
