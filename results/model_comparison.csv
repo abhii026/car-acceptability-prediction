@@ -1,0 +1,6 @@
+Model,Accuracy,Precision (macro),Recall (macro),F1 (macro)
+Decision Tree,0.9393,0.8121,0.8701,0.8379
+KNN (k=5),0.9133,0.925,0.7604,0.8131
+Logistic Regression,0.8006,0.6693,0.557,0.598
+Naive Bayes,0.841,0.6714,0.5098,0.5415
+Majority baseline,0.6994,0.1749,0.25,0.2058
